@@ -30,6 +30,9 @@ CREATE TABLE dbo.AuditLog (
     Payload   VARBINARY(64) NULL
 );
 GO
+EXEC sys.sp_cdc_enable_db;
+EXEC sys.sp_cdc_enable_table @source_schema = 'dbo', @source_name = 'AuditLog', @role_name = NULL;
+GO
 INSERT INTO Sales.Customers (CustomerName, Email, CustomerSince, CreditLimit, IsActive)
 SELECT CONCAT('Customer ', n), CONCAT('cust', n, '@example.com'), DATEADD(day, -n, '2026-01-01'),
        n * 100.50, CASE WHEN n % 5 = 0 THEN 0 ELSE 1 END

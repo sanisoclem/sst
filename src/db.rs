@@ -172,7 +172,7 @@ pub async fn tables(client: &mut Client) -> Result<Vec<Table>> {
         JOIN sys.schemas s ON s.schema_id = o.schema_id
         JOIN sys.columns c ON c.object_id = o.object_id
         JOIN sys.types t ON t.user_type_id = c.user_type_id
-        WHERE o.type IN ('U', 'V') AND o.is_ms_shipped = 0
+        WHERE o.type IN ('U', 'V') AND (o.is_ms_shipped = 0 OR s.name = 'cdc')
         ORDER BY s.name, o.name, c.column_id";
 
     let rows = client.simple_query(SQL).await?.into_first_result().await?;

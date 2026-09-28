@@ -97,6 +97,10 @@ async fn queries_renders_completes_and_exports() {
     let names: Vec<String> = tables.iter().map(|t| t.qualified()).collect();
     assert!(names.contains(&"Sales.Orders".to_string()), "{names:?}");
     assert!(names.contains(&"dbo.AuditLog".to_string()), "{names:?}");
+    assert!(
+        names.contains(&"cdc.dbo_AuditLog_CT".to_string()),
+        "CDC change tables are system-shipped but still queryable: {names:?}"
+    );
 
     let buffer = "SELECT o.tot FROM Sales.Orders o";
     let found = complete::candidates(&tables, buffer, buffer, "SELECT o.tot".len());
